@@ -13,8 +13,13 @@ public class PlayerController : MonoBehaviour {
     public float jumpHeight = 40.0f;
     public float jumpControl = 0.5f;
     public Vector2 terminalVelocity;
+    public float maxLandingVelocity = 1.0f;
     public float decelRate = 1.0f;
     public float groundedVelocity = 0.1f;
+
+    bool isGrounded = true;
+    bool isFalling = false;
+    bool tryingToStop = false;
 
     public GameObject holding;
 
@@ -29,37 +34,67 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        // find state
+        isGrounded = CheckIsGrounded();
+        if (isGrounded && isFalling)
+            tryingToStop = true;
+        isFalling = (rb.velocity.y < -groundedVelocity);
+
         // set animator
         anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
         sprite.flipX = (rb.velocity.x < groundedVelocity) ? true : false;
-        anim.SetBool("isGrounded", isGrounded());
-        anim.SetBool("Falling", rb.velocity.y < 0.1 ? true : false);
-
-        // clamp velocity
-        Vector2 newRB = rb.velocity;
-        newRB.x = Mathf.Clamp(newRB.x, -terminalVelocity.x, terminalVelocity.x);
-        newRB.y = Mathf.Clamp(newRB.y, -terminalVelocity.y, terminalVelocity.y);
-        rb.velocity = newRB;
-
+        anim.SetBool("isGrounded", isGrounded);
+        anim.SetBool("Falling", isFalling);
 
         // get input
         input = Vector2.zero;
-        input.x = Input.GetAxis("Horizontal") * playerSpeed * (isGrounded() ? 1.0f : jumpControl);
 
-        if (input.x == 0 && isGrounded())
+        // check if player is trying to decel
+        if (rb.velocity.x > 0 && input.x < 0 || rb.velocity.x < 0 && input.x > 0)
+        {
+            // we are trying to slow down!!!
+            tryingToStop = true;
+        }
+
+        input.x = Input.GetAxis("Horizontal") * (playerSpeed) * (isGrounded ? 1.0f : jumpControl);
+
+        if (input.x == 0 && isGrounded)
         {
             // decel
             rb.AddForce(-rb.velocity * decelRate);
         }
 
-        if (Input.GetButton("Jump") && isGrounded())
+        if (Input.GetButton("Jump") && isGrounded)
+        {
             input.y = jumpHeight;
+        }
 
         // add force
         rb.AddForce(input);
+
+   }
+
+    private void FixedUpdate()
+    {
+        if (tryingToStop)
+        {
+            // clamp velocity
+            Vector2 newRB = rb.velocity;
+            newRB.x = Mathf.Clamp(newRB.x, -maxLandingVelocity, maxLandingVelocity);
+            rb.velocity = newRB;
+            tryingToStop = false;
+        }
+        else
+        {
+            // clamp velocity
+            Vector2 newRB = rb.velocity;
+            newRB.x = Mathf.Clamp(newRB.x, -terminalVelocity.x, terminalVelocity.x);
+            newRB.y = Mathf.Clamp(newRB.y, -terminalVelocity.y, terminalVelocity.y);
+            rb.velocity = newRB;
+        }
     }
 
-    bool isGrounded()
+    bool CheckIsGrounded()
     {
         if (Mathf.Abs(rb.velocity.y) < groundedVelocity)
             return true;
