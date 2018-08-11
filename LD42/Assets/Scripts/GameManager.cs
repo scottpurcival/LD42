@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour {
     public Vector3 parTime;
     float playTime;
     GameObject gcanFlare;
+    Whoosh whooshText;
+    PlaySoundTrigger allFilesCollectedTrigger;
+    PlaySoundTrigger oneFileCollectedTrigger;
 
 
 	// Use this for initialization
@@ -22,6 +25,10 @@ public class GameManager : MonoBehaviour {
         UpdateFileCount();
         gcanFlare = GameObject.FindGameObjectWithTag("GarbageCanFlare");
         gcanFlare.SetActive(false);
+        whooshText = GameObject.FindGameObjectWithTag("InstructionText").GetComponent<Whoosh>();
+        whooshText.WhooshNow("DESTROY ALL FILES!!!!");
+        allFilesCollectedTrigger = GameObject.Find("FilesCollectedTrigger").GetComponent<PlaySoundTrigger>();
+        oneFileCollectedTrigger = GameObject.Find("AudioTriggerFile").GetComponent<PlaySoundTrigger>();
 	}
 	
 	// Update is called once per frame
@@ -51,15 +58,20 @@ public class GameManager : MonoBehaviour {
     {
         filesCollected++;
         UpdateFileCount();
+        if(filesCollected < filesInScene)
+            oneFileCollectedTrigger.PlaySound();
     }
 
     void UpdateFileCount()
     {
         fileCounter.text = filesCollected.ToString().PadLeft(2, '0') + " / " + filesInScene.ToString().PadLeft(2, '0');
+
         if (filesCollected >= filesInScene)
         {
             GameObject.FindGameObjectWithTag("GarbageCan").GetComponentInChildren<Wiggle>().enabled = true;
             gcanFlare.SetActive(true);
+            whooshText.WhooshNow("CHUCK EM IN THE TRAAAAASH!!!");
+            allFilesCollectedTrigger.PlaySound();
         }
     }
 
@@ -68,6 +80,7 @@ public class GameManager : MonoBehaviour {
         // player has entered the exit, can they leave?
         if(filesCollected >= filesInScene)
         {
+            whooshText.WhooshNow("HECK YEA BOI!!!!!\n\nYOU WIN!");
             EndGame();
         }
     }

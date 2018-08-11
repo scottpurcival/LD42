@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour {
     public float maxLandingVelocity = 1.0f;
     public float decelRate = 1.0f;
     public float groundedVelocity = 0.1f;
+    public float distanceToGround = 0;
+    public string[] groundLayers;
 
     bool isGrounded = true;
     bool isFalling = false;
@@ -92,6 +94,14 @@ public class PlayerController : MonoBehaviour {
             newRB.y = Mathf.Clamp(newRB.y, -terminalVelocity.y, terminalVelocity.y);
             rb.velocity = newRB;
         }
+
+            RaycastHit2D groundTest = Physics2D.Raycast(transform.position, Vector2.down, 10.0f, LayerMask.GetMask(groundLayers));
+            if (groundTest)
+                distanceToGround = groundTest.distance;
+            else
+                distanceToGround = 100;
+
+            anim.SetFloat("DistanceToGround", distanceToGround);
     }
 
     bool CheckIsGrounded()
@@ -114,6 +124,9 @@ public class PlayerController : MonoBehaviour {
 
         if (collision.gameObject.tag == "GarbageCan")
             gm.PlayerExit();
+
+        if (collision.gameObject.tag == "AudioTrigger")
+            collision.GetComponent<PlaySoundTrigger>().PlaySound();
     }
 
 }

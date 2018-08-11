@@ -6,6 +6,9 @@ TagManager:
   tags:
   - FileToClear
   - GarbageCan
+  - GarbageCanFlare
+  - InstructionText
+  - AudioTrigger
   layers:
   - Default
   - TransparentFX
@@ -19,7 +22,7 @@ TagManager:
   - MenuBar
   - Player
   - Enemy
-  - 
+  - AudioTriggers
   - 
   - 
   - 

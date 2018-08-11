@@ -10,11 +10,13 @@ public class Whoosh : MonoBehaviour {
 
     float whooshStart;
     Text whooshText;
+    RectTransform whooshTransform;
     bool whooshing = false;
 
     void Start()
     {
         whooshText = GetComponent<Text>();
+        whooshTransform = GetComponent<RectTransform>();
     }
 
 	// Update is called once per frame
@@ -22,28 +24,31 @@ public class Whoosh : MonoBehaviour {
     {
 		if(whooshing)
         {
-            if (Time.time - whooshStart < whooshTime)
+            float elapsedTime = Time.time - whooshStart;
+            float newScale;
+            if (elapsedTime < whooshTime)
             {
-
+                newScale = elapsedTime / whooshTime;
+                whooshTransform.localScale = new Vector3(newScale, newScale, newScale);
             }
-            else if (Time.time - whooshStart > whooshTime && Time.time - whooshStart < whooshTime + stayTime)
+            else if (elapsedTime > whooshTime && elapsedTime < whooshTime + stayTime)
             {
-
+                whooshTransform.localScale = new Vector3(1, 1, 1);
             }
-            else if (Time.time - whooshStart > whooshTime + stayTime && Time.time - whooshStart > whooshTime + stayTime + whooshTime)
+            else if (elapsedTime > whooshTime + stayTime && elapsedTime < whooshTime + stayTime + whooshTime)
             {
-
+                newScale = 1 - ((elapsedTime - stayTime - whooshTime) / whooshTime);
+                whooshTransform.localScale = new Vector3(newScale, newScale, newScale);
             }
             else
             {
                 whooshing = false;
-                whooshText.gameObject.transform.scale = Vector3.zero;
+                whooshTransform.localScale = Vector3.zero;
             }
-
         }
 	}
 
-    public void Whoosh(string text)
+    public void WhooshNow(string text)
     {
         whooshText.text = text;
         whooshStart = Time.time;
