@@ -22,4 +22,9 @@ public class PlaySoundTrigger : MonoBehaviour {
 
         hasPlayed = true;
     }
+
+    public bool isPlaying()
+    {
+        return audioSource.isPlaying;
+    }
 }

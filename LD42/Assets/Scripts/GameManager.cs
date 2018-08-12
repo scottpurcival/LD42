@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour {
     public PlaySoundTrigger allFilesCollectedTrigger;
     public PlaySoundTrigger oneFileCollectedTrigger;
 
-
 	// Use this for initialization
 	void Start ()
     {
@@ -77,13 +76,21 @@ public class GameManager : MonoBehaviour {
         if(filesCollected >= filesInScene)
         {
             whooshText.WhooshNow("HECK YEA BOI!!!!!\n\nYOU WIN!");
-            EndGame();
+            StartCoroutine(EndGame());
         }
     }
 
-    void EndGame()
+    IEnumerator EndGame()
     {
-        NextScene.GoNextScene();
+        while (allFilesCollectedTrigger.isPlaying())
+        { yield return null; } // wait 
+
+        yield return new WaitForSeconds(2.0f);
+
+        GetComponent<NextScene>().GoNextScene();
         Debug.Log("You Win!");
+
+        yield break;
     }
+
 }

@@ -15,8 +15,10 @@ public class PlayerController : MonoBehaviour {
     public Vector2 terminalVelocity;
     public float maxLandingVelocity = 1.0f;
     public float decelRate = 1.0f;
-    public float groundedVelocity = 0.1f;
+    public float flipVelocity = 0.1f;
     public float distanceToGround = 0;
+    public float groundedDistance = 1.0f;
+    public float onGroundDist = 0.7f;
     public string[] groundLayers;
 
     bool isGrounded = true;
@@ -40,11 +42,13 @@ public class PlayerController : MonoBehaviour {
         isGrounded = CheckIsGrounded();
         if (isGrounded && isFalling)
             tryingToStop = true;
-        isFalling = (rb.velocity.y < -groundedVelocity);
+        isFalling = !isGrounded && (rb.velocity.y < -flipVelocity);
+        if (isFalling)
+            Debug.Log(RayCastDistToGround() + " : " + rb.velocity.y);
 
         // set animator
         anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
-        sprite.flipX = (rb.velocity.x < groundedVelocity) ? true : false;
+        sprite.flipX = (rb.velocity.x < flipVelocity) ? true : false;
         anim.SetBool("isGrounded", isGrounded);
         anim.SetBool("Falling", isFalling);
 
@@ -72,9 +76,10 @@ public class PlayerController : MonoBehaviour {
         }
 
         // add force
-        rb.AddForce(input);
+        rb.AddForce(new Vector2(input.x,0),ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(0, input.y), ForceMode2D.Impulse);
 
-   }
+    }
 
     private void FixedUpdate()
     {
@@ -95,21 +100,23 @@ public class PlayerController : MonoBehaviour {
             rb.velocity = newRB;
         }
 
-            RaycastHit2D groundTest = Physics2D.Raycast(transform.position, Vector2.down, 10.0f, LayerMask.GetMask(groundLayers));
-            if (groundTest)
-                distanceToGround = groundTest.distance;
-            else
-                distanceToGround = 100;
 
-            anim.SetFloat("DistanceToGround", distanceToGround);
+            anim.SetFloat("DistanceToGround", RayCastDistToGround());
+    }
+
+    float RayCastDistToGround()
+    {
+        RaycastHit2D groundTest = Physics2D.Raycast(transform.position, Vector2.down, 10.0f, LayerMask.GetMask(groundLayers));
+        if (groundTest)
+            return groundTest.distance;
+        else
+            return 100.0f;
+
     }
 
     bool CheckIsGrounded()
     {
-        if (Mathf.Abs(rb.velocity.y) < groundedVelocity)
-            return true;
-        else
-            return false;
+        return (RayCastDistToGround() < onGroundDist) || (RayCastDistToGround() < groundedDistance && Mathf.Abs(rb.velocity.y) < flipVelocity);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

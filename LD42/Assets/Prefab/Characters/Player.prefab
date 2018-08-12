@@ -137,14 +137,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f22c70cab0978a142b2dc47954b3cdc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 40
-  jumpHeight: 400
-  jumpControl: 0.6
-  terminalVelocity: {x: 5, y: 1000}
+  playerSpeed: 0.5
+  jumpHeight: 7
+  jumpControl: 1
+  terminalVelocity: {x: 4, y: 10}
   maxLandingVelocity: 1
-  decelRate: 30
-  groundedVelocity: 0.1
+  decelRate: 40
+  flipVelocity: 0.1
   distanceToGround: 0
+  groundedDistance: 1
   groundLayers:
   - MenuBar
   - Icons
@@ -184,7 +185,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 72951696abf633a4a8c088307e03b734, type: 3}
+  m_Sprite: {fileID: 21300002, guid: 72951696abf633a4a8c088307e03b734, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0

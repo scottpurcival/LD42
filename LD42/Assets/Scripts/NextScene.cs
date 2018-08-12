@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public static class NextScene {
+public class NextScene : MonoBehaviour{
 
 
-    public static void GoNextScene()
+    public void GoNextScene()
     {
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
     }
