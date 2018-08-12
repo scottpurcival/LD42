@@ -563,8 +563,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114357337520494222}
-        m_MethodName: RestartSceneAfterAudio
+      - m_Target: {fileID: 82260829116179746}
+        m_MethodName: Play
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
