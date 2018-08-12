@@ -12,10 +12,10 @@ public class GameManager : MonoBehaviour {
     public int filesCollected = 0;
     public Vector3 parTime;
     float playTime;
-    GameObject gcanFlare;
-    Whoosh whooshText;
-    PlaySoundTrigger allFilesCollectedTrigger;
-    PlaySoundTrigger oneFileCollectedTrigger;
+    public GameObject gcanFlare;
+    public Whoosh whooshText;
+    public PlaySoundTrigger allFilesCollectedTrigger;
+    public PlaySoundTrigger oneFileCollectedTrigger;
 
 
 	// Use this for initialization
@@ -23,12 +23,8 @@ public class GameManager : MonoBehaviour {
     {
         GetAllFiles();
         UpdateFileCount();
-        gcanFlare = GameObject.FindGameObjectWithTag("GarbageCanFlare");
         gcanFlare.SetActive(false);
-        whooshText = GameObject.FindGameObjectWithTag("InstructionText").GetComponent<Whoosh>();
         whooshText.WhooshNow("DESTROY ALL FILES!!!!");
-        allFilesCollectedTrigger = GameObject.Find("FilesCollectedTrigger").GetComponent<PlaySoundTrigger>();
-        oneFileCollectedTrigger = GameObject.Find("AudioTriggerFile").GetComponent<PlaySoundTrigger>();
 	}
 	
 	// Update is called once per frame
@@ -68,7 +64,7 @@ public class GameManager : MonoBehaviour {
 
         if (filesCollected >= filesInScene)
         {
-            GameObject.FindGameObjectWithTag("GarbageCan").GetComponentInChildren<Wiggle>().enabled = true;
+            gcanFlare.GetComponent<Wiggle>().enabled = true;
             gcanFlare.SetActive(true);
             whooshText.WhooshNow("CHUCK EM IN THE TRAAAAASH!!!");
             allFilesCollectedTrigger.PlaySound();
