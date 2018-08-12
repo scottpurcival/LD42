@@ -25,6 +25,9 @@ public class PlayerController : MonoBehaviour {
     bool isFalling = false;
     bool tryingToStop = false;
 
+    float lastJump = 0;
+    public float minTimeBetweenJumps = 0.1f;
+
     public GameObject holding;
 
     // Use this for initialization
@@ -70,8 +73,9 @@ public class PlayerController : MonoBehaviour {
             rb.AddForce(-rb.velocity * decelRate);
         }
 
-        if (Input.GetButton("Jump") && isGrounded)
+        if (Input.GetButton("Jump") && isGrounded && (Time.time-lastJump) > minTimeBetweenJumps)
         {
+            lastJump = Time.time;   
             input.y = jumpHeight;
         }
 

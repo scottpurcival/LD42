@@ -8,6 +8,7 @@ public class Patrol : MonoBehaviour {
     public float movementSpeed = 1;
     public float xStart = 0, xFinish = 0;
 
+    SpriteRenderer sr;
     Rigidbody2D rb;
 
     Vector2 startPos, endPos;
@@ -34,6 +35,7 @@ public class Patrol : MonoBehaviour {
         direction = Direction.LEFT;
 
         rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
 	}
 	
 	// Update is called once per frame
@@ -44,7 +46,9 @@ public class Patrol : MonoBehaviour {
         if (endPos.x - transform.position.x < 0.1 )
             direction = Direction.LEFT;
 
-        float newX = Mathf.Lerp(transform.position.x, direction == Direction.LEFT ? startPos.x : endPos.x, Time.deltaTime * movementSpeed);
+        sr.flipX = (direction == Direction.LEFT) ? false : true;
+
+        float newX = transform.position.x + ((float)direction * Time.deltaTime * movementSpeed);
         rb.MovePosition(new Vector2(newX, transform.position.y));
     }
 }
