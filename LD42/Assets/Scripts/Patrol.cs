@@ -7,6 +7,8 @@ public class Patrol : MonoBehaviour {
 
     public float movementSpeed = 1;
     public float xStart = 0, xFinish = 0;
+    public float yStart = 0, yFinish = 0;
+
 
     SpriteRenderer sr;
     Rigidbody2D rb;
@@ -15,14 +17,15 @@ public class Patrol : MonoBehaviour {
     enum Direction
     {
         LEFT = -1,
-        RIGHT = 1
+        RIGHT = 1,
     }
-    Direction direction;
+    Direction directionLR;
+    Direction directionUD;
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawIcon(new Vector3(xStart + transform.position.x, transform.position.y, transform.position.z), "PatrolL.png");
-        Gizmos.DrawIcon(new Vector3(xFinish + transform.position.x, transform.position.y, transform.position.z), "PatrolR.png");
+            Gizmos.DrawIcon(new Vector3(xStart + transform.position.x, yStart + transform.position.y, transform.position.z), "PatrolL.png");
+            Gizmos.DrawIcon(new Vector3(xFinish + transform.position.x, yFinish + transform.position.y, transform.position.z), "PatrolR.png");
     }
 
     // Use this for initialization
@@ -31,8 +34,10 @@ public class Patrol : MonoBehaviour {
         startPos = transform.position;
         endPos = transform.position;
         startPos.x += xStart;
+        startPos.y += yStart;
         endPos.x += xFinish;
-        direction = Direction.LEFT;
+        endPos.y += yFinish;
+        directionLR = Direction.LEFT;
 
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
@@ -42,13 +47,14 @@ public class Patrol : MonoBehaviour {
 	void Update ()
     {
         if (transform.position.x - startPos.x < 0.1)
-            direction = Direction.RIGHT;
+            directionLR = Direction.RIGHT;
         if (endPos.x - transform.position.x < 0.1 )
-            direction = Direction.LEFT;
+            directionLR = Direction.LEFT;
 
-        sr.flipX = (direction == Direction.LEFT) ? false : true;
+        sr.flipX = (directionLR == Direction.LEFT) ? false : true;
 
-        float newX = transform.position.x + ((float)direction * Time.deltaTime * movementSpeed);
-        rb.MovePosition(new Vector2(newX, transform.position.y));
+        Vector2 bearing = (endPos - (Vector2)transform.position).normalized; 
+
+        rb.MovePosition(transform.position + (Vector3)(bearing * ((float)directionLR * Time.deltaTime * movementSpeed)));
     }
 }
