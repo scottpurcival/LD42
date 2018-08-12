@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wiggleAmount: 3
-  wiggleSpeed: 5
+  wiggleSpeed: 360
   pauseBetweenWiggles: 0
 --- !u!222 &222204901493551466
 CanvasRenderer:
@@ -119,13 +119,13 @@ RectTransform:
   m_GameObject: {fileID: 1791248451081168}
   m_LocalRotation: {x: 0, y: 0, z: 0.02340553, w: 0.99972606}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 900, y: 100}
+  m_SizeDelta: {x: -12.599976, y: -346.2}
   m_Pivot: {x: 0.5, y: 0.5}

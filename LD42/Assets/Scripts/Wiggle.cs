@@ -20,7 +20,7 @@ public class Wiggle : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        if (currentInterval > 360)
+        if (currentInterval == 360)
         {
             pauseTimer = pauseBetweenWiggles;
             currentInterval = 0;
@@ -29,9 +29,11 @@ public class Wiggle : MonoBehaviour {
         if (pauseTimer < 0)
         {
             currentInterval += Time.deltaTime * wiggleSpeed;
+            if (currentInterval > 360)
+                currentInterval = 360;
 
             Vector3 newRotation = Vector3.zero;
-            newRotation.z = Mathf.Sin(currentInterval) * wiggleAmount;
+            newRotation.z = Mathf.Sin((currentInterval / 360) * Mathf.PI * 2) * wiggleAmount;
             spriteTransform.localEulerAngles = newRotation;
         }
         else

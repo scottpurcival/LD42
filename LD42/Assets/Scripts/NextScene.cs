@@ -8,6 +8,10 @@ public class NextScene : MonoBehaviour{
 
     public void GoNextScene()
     {
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+        int nextScene = SceneManager.GetActiveScene().buildIndex + 1;
+        if (nextScene >= SceneManager.sceneCountInBuildSettings)
+            nextScene = 0;
+
+        SceneManager.LoadSceneAsync(nextScene);
     }
 }

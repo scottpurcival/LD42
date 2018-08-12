@@ -586,16 +586,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 224487413007755948, guid: b9672477f4e85ac419788bb03990c22e,
-        type: 2}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224487413007755948, guid: b9672477f4e85ac419788bb03990c22e,
-        type: 2}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b9672477f4e85ac419788bb03990c22e, type: 2}
   m_IsPrefabParent: 0
