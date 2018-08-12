@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
     public PlaySoundTrigger allFilesCollectedTrigger;
     public PlaySoundTrigger oneFileCollectedTrigger;
     public PlaySoundTrigger deathTrigger;
+    GameObject shutDown;
 
 	// Use this for initialization
 	void Start ()
@@ -25,14 +26,35 @@ public class GameManager : MonoBehaviour {
         UpdateFileCount();
         gcanFlare.SetActive(false);
         whooshText.WhooshNow("DESTROY ALL FILES!!!!");
-	}
+        shutDown = GameObject.FindGameObjectWithTag("ShutDown");
+        shutDown.SetActive(false);
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
         playTime += Time.deltaTime;
         UpdateTime();
+
+        if (Input.GetButtonDown("Cancel"))
+        {
+            TogglePause();
+        }
 	}
+
+    public void TogglePause()
+    {
+        if(shutDown.activeSelf)
+        {
+            Time.timeScale = 1;
+            shutDown.SetActive(false);
+        }
+        else
+        {
+            Time.timeScale = 0;
+            shutDown.SetActive(true);
+        }
+    }
 
     void UpdateTime()
     {
@@ -56,6 +78,11 @@ public class GameManager : MonoBehaviour {
         UpdateFileCount();
         if(filesCollected < filesInScene)
             oneFileCollectedTrigger.PlaySound();
+    }
+
+    public bool AreAllFilesCollected()
+    {
+        return (filesCollected >= filesInScene);
     }
 
     void UpdateFileCount()

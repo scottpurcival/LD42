@@ -9,10 +9,13 @@ public class PlayerController : MonoBehaviour {
     Animator anim;
     SpriteRenderer sprite;
     GameManager gm;
+    public AudioSource footsteps;
+    public AudioSource jump;
     public float playerSpeed = 10.0f;
     public float jumpHeight = 40.0f;
     public float jumpControl = 0.5f;
     public Vector2 terminalVelocity;
+    public float footstepSpeedModifier = 1.0f;
     public float maxLandingVelocity = 1.0f;
     public float decelRate = 1.0f;
     public float flipVelocity = 0.1f;
@@ -22,6 +25,7 @@ public class PlayerController : MonoBehaviour {
     public string[] groundLayers;
 
     bool controlsEnabled = true;
+    bool isAlive = true;
     bool isGrounded = true;
     bool isFalling = false;
     bool tryingToStop = false;
@@ -38,7 +42,7 @@ public class PlayerController : MonoBehaviour {
         anim = GetComponentInChildren<Animator>();
         sprite = GetComponentInChildren<SpriteRenderer>();
         gm = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
-	}
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -66,6 +70,8 @@ public class PlayerController : MonoBehaviour {
             {
                 lastJump = Time.time;
                 input.y = jumpHeight;
+                jump.pitch = Random.Range(0.8f, 1.2f);
+                jump.Play();
             }
 
             if(Input.GetAxis("Vertical") < 0 && !dancing)
@@ -97,6 +103,10 @@ public class PlayerController : MonoBehaviour {
             rb.AddForce(-rb.velocity * decelRate);
         }
 
+        if (isGrounded)
+            footsteps.pitch = Mathf.Abs(rb.velocity.x) / terminalVelocity.x * footstepSpeedModifier;
+        else
+            footsteps.pitch = 0;
 
         // add force
         rb.AddForce(new Vector2(input.x,0),ForceMode2D.Impulse);
@@ -123,8 +133,10 @@ public class PlayerController : MonoBehaviour {
             rb.velocity = newRB;
         }
 
+        if(!isAlive && isGrounded)
+            rb.simulated = false;   // disable rigidbody on death.
 
-            anim.SetFloat("DistanceToGround", RayCastDistToGround());
+        anim.SetFloat("DistanceToGround", RayCastDistToGround());
     }
 
     float RayCastDistToGround()
@@ -154,9 +166,12 @@ public class PlayerController : MonoBehaviour {
 
         if (collision.gameObject.tag == "GarbageCan")
         {
-            anim.SetTrigger("Dance");
-            gm.PlayerExit();
-            controlsEnabled = false;
+            if (gm.AreAllFilesCollected())
+            {
+                anim.SetTrigger("Dance");
+                gm.PlayerExit();
+                controlsEnabled = false;
+            }
         }
 
         if (collision.gameObject.tag == "AudioTrigger")
@@ -169,8 +184,7 @@ public class PlayerController : MonoBehaviour {
         {
             // we are hit!! disable control
             controlsEnabled = false;
-            rb.simulated = false;
-
+            isAlive = false;
             // play animation
             anim.SetTrigger("Died");
             // die

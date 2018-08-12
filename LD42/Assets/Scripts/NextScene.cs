@@ -5,6 +5,49 @@ using UnityEngine.SceneManagement;
 
 public class NextScene : MonoBehaviour{
 
+    AudioSource audio;
+
+    public void GoToNextSceneAfterAudio()
+    {
+        audio = GetComponent<AudioSource>();
+
+        if (audio)
+            StartCoroutine(WaitForSound());
+        else
+            GoNextScene();
+
+    }
+
+    public void GoToMenuAfterAudio()
+    {
+        audio = GetComponent<AudioSource>();
+
+        if (audio)
+            StartCoroutine(WaitForSoundMenu());
+        else
+            GoToMenu();
+
+    }
+
+    IEnumerator WaitForSound()
+    {
+        while(audio.isPlaying)
+        {
+            yield return null;
+        }
+
+        GoNextScene();
+    }
+
+    IEnumerator WaitForSoundMenu()
+    {
+        while (audio.isPlaying)
+        {
+            yield return null;
+        }
+
+        GoToMenu();
+    }
 
     public void GoNextScene()
     {
@@ -18,5 +61,10 @@ public class NextScene : MonoBehaviour{
     public void RestartLevel()
     {
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void GoToMenu()
+    {
+        SceneManager.LoadSceneAsync(0);
     }
 }
