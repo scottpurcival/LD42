@@ -18,6 +18,17 @@ public class NextScene : MonoBehaviour{
 
     }
 
+    public void RestartSceneAfterAudio()
+    {
+        audio = GetComponent<AudioSource>();
+
+        if (audio)
+            StartCoroutine(WaitForSoundRestart());
+        else
+            RestartLevel();
+
+    }
+
     public void GoToMenuAfterAudio()
     {
         audio = GetComponent<AudioSource>();
@@ -37,6 +48,16 @@ public class NextScene : MonoBehaviour{
         }
 
         GoNextScene();
+    }
+
+    IEnumerator WaitForSoundRestart()
+    {
+        while (audio.isPlaying)
+        {
+            yield return null;
+        }
+
+        RestartLevel();
     }
 
     IEnumerator WaitForSoundMenu()
@@ -67,5 +88,10 @@ public class NextScene : MonoBehaviour{
     public void GoToMenu()
     {
         SceneManager.LoadSceneAsync(0);
+    }
+
+    public void TogglePause()
+    {
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>().TogglePause();
     }
 }

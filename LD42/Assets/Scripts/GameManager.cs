@@ -10,14 +10,14 @@ public class GameManager : MonoBehaviour {
     public Text timer;
     public int filesInScene = 0;
     public int filesCollected = 0;
-    public Vector3 parTime;
+    public float parTime = 120;
     float playTime;
     public GameObject gcanFlare;
     public Whoosh whooshText;
     public PlaySoundTrigger allFilesCollectedTrigger;
     public PlaySoundTrigger oneFileCollectedTrigger;
     public PlaySoundTrigger deathTrigger;
-    GameObject shutDown;
+    ShutdownPanel shutDown;
 
 	// Use this for initialization
 	void Start ()
@@ -26,14 +26,14 @@ public class GameManager : MonoBehaviour {
         UpdateFileCount();
         gcanFlare.SetActive(false);
         whooshText.WhooshNow("DESTROY ALL FILES!!!!");
-        shutDown = GameObject.FindGameObjectWithTag("ShutDown");
-        shutDown.SetActive(false);
+        shutDown = GameObject.FindGameObjectWithTag("ShutDown").GetComponent<ShutdownPanel>();
+        playTime = parTime;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        playTime += Time.deltaTime;
+        playTime -= Time.deltaTime;
         UpdateTime();
 
         if (Input.GetButtonDown("Cancel"))
@@ -44,16 +44,7 @@ public class GameManager : MonoBehaviour {
 
     public void TogglePause()
     {
-        if(shutDown.activeSelf)
-        {
-            Time.timeScale = 1;
-            shutDown.SetActive(false);
-        }
-        else
-        {
-            Time.timeScale = 0;
-            shutDown.SetActive(true);
-        }
+        shutDown.TogglePause();
     }
 
     void UpdateTime()
@@ -63,6 +54,8 @@ public class GameManager : MonoBehaviour {
         int millisecs = (int)Mathf.Abs((playTime - (minutes * 60) - (seconds) * 100));
         Int32.TryParse(millisecs.ToString().PadLeft(2,'0').Substring(0, 2), out millisecs);
         timer.text = minutes.ToString().PadLeft(2, '0') + ":" + seconds.ToString().PadLeft(2, '0') + ":" + millisecs.ToString().PadLeft(2, '0');
+
+
     }
 
     void GetAllFiles()
