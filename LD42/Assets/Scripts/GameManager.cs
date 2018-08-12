@@ -83,6 +83,7 @@ public class GameManager : MonoBehaviour {
 
     void EndGame()
     {
+        NextScene.GoNextScene();
         Debug.Log("You Win!");
     }
 }
