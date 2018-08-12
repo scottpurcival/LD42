@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
     GameManager gm;
     public AudioSource footsteps;
     public AudioSource jump;
+    public AudioSource fileWhoosh;
     public float playerSpeed = 10.0f;
     public float jumpHeight = 40.0f;
     public float jumpControl = 0.5f;
@@ -162,6 +163,7 @@ public class PlayerController : MonoBehaviour {
         {
             Destroy(collision.gameObject);
             gm.CollectFile();
+            fileWhoosh.Play();
         }
 
         if (collision.gameObject.tag == "GarbageCan")

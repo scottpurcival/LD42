@@ -46,6 +46,7 @@ public class NextScene : MonoBehaviour{
             yield return null;
         }
 
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>().TogglePause();
         GoToMenu();
     }
 

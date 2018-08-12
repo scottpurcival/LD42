@@ -56,7 +56,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.32
+  m_Radius: 1
 --- !u!82 &82996942963834318
 AudioSource:
   m_ObjectHideFlags: 1
@@ -167,3 +167,6 @@ MonoBehaviour:
   sounds:
   - {fileID: 8300000, guid: 14154de0bd69e2a459a3791ed8705de0, type: 3}
   playOnceOnly: 1
+  autoFire: 0
+  autoFireRate: 5
+  playSequentially: 0
