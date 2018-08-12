@@ -2273,7 +2273,7 @@ MonoBehaviour:
   timer: {fileID: 536686188}
   filesInScene: 0
   filesCollected: 0
-  parTime: {x: 0, y: 0, z: 0}
+  parTime: 0
   gcanFlare: {fileID: 840333099}
   whooshText: {fileID: 1314613513}
   allFilesCollectedTrigger: {fileID: 1268811039}
@@ -2886,11 +2886,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4687713701142016, guid: 27b6550c99578834abcce8e8cd010b55, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -2.2
+      value: 2.48
       objectReference: {fileID: 0}
     - target: {fileID: 4687713701142016, guid: 27b6550c99578834abcce8e8cd010b55, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.47
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 4687713701142016, guid: 27b6550c99578834abcce8e8cd010b55, type: 2}
       propertyPath: m_LocalPosition.z
@@ -2919,12 +2919,17 @@ Prefab:
     - target: {fileID: 114646426267439070, guid: 27b6550c99578834abcce8e8cd010b55,
         type: 2}
       propertyPath: xStart
-      value: -5.63
+      value: -1.62
       objectReference: {fileID: 0}
     - target: {fileID: 114646426267439070, guid: 27b6550c99578834abcce8e8cd010b55,
         type: 2}
       propertyPath: xFinish
-      value: 5.52
+      value: 4.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 114646426267439070, guid: 27b6550c99578834abcce8e8cd010b55,
+        type: 2}
+      propertyPath: yFinish
+      value: -4.46
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 27b6550c99578834abcce8e8cd010b55, type: 2}
