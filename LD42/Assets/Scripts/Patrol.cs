@@ -46,9 +46,9 @@ public class Patrol : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if (transform.position.x - startPos.x < 0.1)
+        if (transform.position.x - startPos.x < 0.1 && startPos.y - transform.position.y < 0.1)
             directionLR = Direction.RIGHT;
-        if (endPos.x - transform.position.x < 0.1 )
+        if (endPos.x - transform.position.x < 0.1 && transform.position.y - endPos.y < 0.1)
             directionLR = Direction.LEFT;
 
         sr.flipX = (directionLR == Direction.LEFT) ? false : true;
