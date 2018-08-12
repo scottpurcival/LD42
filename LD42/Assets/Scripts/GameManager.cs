@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour {
     public PlaySoundTrigger oneFileCollectedTrigger;
     public PlaySoundTrigger deathTrigger;
     ShutdownPanel shutDown;
+    GameObject popupContainer;
+    public GameObject popUp;
+    bool popUpsFired = false;
 
 	// Use this for initialization
 	void Start ()
@@ -28,6 +31,7 @@ public class GameManager : MonoBehaviour {
         whooshText.WhooshNow("DESTROY ALL FILES!!!!");
         shutDown = GameObject.FindGameObjectWithTag("ShutDown").GetComponent<ShutdownPanel>();
         playTime = parTime;
+        popupContainer = GameObject.FindGameObjectWithTag("PopUpContainer");
     }
 	
 	// Update is called once per frame
@@ -49,13 +53,32 @@ public class GameManager : MonoBehaviour {
 
     void UpdateTime()
     {
-        int minutes = (int)Mathf.Abs(playTime / 60.0f);
-        int seconds = (int)Mathf.Abs((playTime - (minutes * 60)));
-        int millisecs = (int)Mathf.Abs((playTime - (minutes * 60) - (seconds) * 100));
+        int minutes = (int)(Mathf.Abs(playTime) / 60.0f);
+        int seconds = (int)(Mathf.Abs(playTime) - (minutes * 60));
+        int millisecs = (int)((Mathf.Abs(playTime) - (minutes * 60) - (seconds)) * 100.0f);
         Int32.TryParse(millisecs.ToString().PadLeft(2,'0').Substring(0, 2), out millisecs);
-        timer.text = minutes.ToString().PadLeft(2, '0') + ":" + seconds.ToString().PadLeft(2, '0') + ":" + millisecs.ToString().PadLeft(2, '0');
+        timer.text = ((playTime < 0) ? "-" : "") + minutes.ToString().PadLeft(2, '0') + ":" + seconds.ToString().PadLeft(2, '0') + ":" + millisecs.ToString().PadLeft(2, '0');
+        if (playTime < 0)
+            timer.color = Color.red;
 
+        if (playTime < 0 && !popUpsFired)
+            StartCoroutine(PopUps());
 
+    }
+
+    IEnumerator PopUps()
+    {
+        popUpsFired = true;
+        while(true)
+        {
+            // create popup
+            GameObject temp = Instantiate(popUp, popupContainer.transform, false);
+            Vector2 screensize = new Vector2(Screen.width, Screen.height);
+            Vector2 spawnPos = new Vector2(UnityEngine.Random.Range(screensize.x*0.15f, screensize.x * 0.85f), UnityEngine.Random.Range(screensize.y * 0.15f, screensize.y * 0.85f));
+            temp.transform.SetPositionAndRotation(spawnPos, Quaternion.identity);
+
+            yield return new WaitForSeconds(10.0f);
+        }
     }
 
     void GetAllFiles()

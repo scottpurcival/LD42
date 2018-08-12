@@ -11,6 +11,7 @@ TagManager:
   - AudioTrigger
   - Enemy
   - ShutDown
+  - PopUpContainer
   layers:
   - Default
   - TransparentFX
