@@ -1490,7 +1490,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4085217505915246, guid: 9f9dab289e8effc49a42c0276f870ba5, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -2
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4085217505915246, guid: 9f9dab289e8effc49a42c0276f870ba5, type: 2}
       propertyPath: m_LocalPosition.y
@@ -1589,7 +1589,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4085217505915246, guid: 9f9dab289e8effc49a42c0276f870ba5, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -4.5
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 4085217505915246, guid: 9f9dab289e8effc49a42c0276f870ba5, type: 2}
       propertyPath: m_LocalPosition.y
@@ -1719,6 +1719,11 @@ Prefab:
     - target: {fileID: 4661856293340306, guid: 65508a57acad79e4f84a440b57f24dad, type: 2}
       propertyPath: m_RootOrder
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114454675178831488, guid: 65508a57acad79e4f84a440b57f24dad,
+        type: 2}
+      propertyPath: xStart
+      value: -1.29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65508a57acad79e4f84a440b57f24dad, type: 2}
@@ -2533,12 +2538,22 @@ Prefab:
     - target: {fileID: 231391945481338202, guid: 9f9dab289e8effc49a42c0276f870ba5,
         type: 2}
       propertyPath: m_ConnectedAnchor.x
-      value: -2
+      value: -1.9755071
       objectReference: {fileID: 0}
     - target: {fileID: 231391945481338202, guid: 9f9dab289e8effc49a42c0276f870ba5,
         type: 2}
       propertyPath: m_ConnectedAnchor.y
-      value: -2.01
+      value: -1.985507
+      objectReference: {fileID: 0}
+    - target: {fileID: 231391945481338202, guid: 9f9dab289e8effc49a42c0276f870ba5,
+        type: 2}
+      propertyPath: m_Anchor.y
+      value: 0.024492979
+      objectReference: {fileID: 0}
+    - target: {fileID: 231391945481338202, guid: 9f9dab289e8effc49a42c0276f870ba5,
+        type: 2}
+      propertyPath: m_Anchor.x
+      value: 0.02449286
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9f9dab289e8effc49a42c0276f870ba5, type: 2}
