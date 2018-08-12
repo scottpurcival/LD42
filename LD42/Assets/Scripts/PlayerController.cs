@@ -21,9 +21,11 @@ public class PlayerController : MonoBehaviour {
     public float onGroundDist = 0.7f;
     public string[] groundLayers;
 
+    bool controlsEnabled = true;
     bool isGrounded = true;
     bool isFalling = false;
     bool tryingToStop = false;
+    bool dancing = false;
 
     float lastJump = 0;
     public float minTimeBetweenJumps = 0.1f;
@@ -55,8 +57,32 @@ public class PlayerController : MonoBehaviour {
         anim.SetBool("isGrounded", isGrounded);
         anim.SetBool("Falling", isFalling);
 
-        // get input
-        input = Vector2.zero;
+        if (controlsEnabled)
+        {
+            // get input
+            input = Vector2.zero;
+            input.x = Input.GetAxis("Horizontal") * (playerSpeed) * (isGrounded ? 1.0f : jumpControl);
+            if (Input.GetButton("Jump") && isGrounded && (Time.time - lastJump) > minTimeBetweenJumps)
+            {
+                lastJump = Time.time;
+                input.y = jumpHeight;
+            }
+
+            if(Input.GetAxis("Vertical") < 0 && !dancing)
+            {
+                // DANCE MOFO!
+                anim.SetTrigger("Dance");
+                dancing = true;
+            }
+            
+            if(Input.GetAxis("Vertical") >= 0 && dancing)
+            {
+                    // STOP!
+                    anim.SetTrigger("StopDance");
+                    dancing = false;
+            }
+
+        }
 
         // check if player is trying to decel
         if (rb.velocity.x > 0 && input.x < 0 || rb.velocity.x < 0 && input.x > 0)
@@ -65,19 +91,12 @@ public class PlayerController : MonoBehaviour {
             tryingToStop = true;
         }
 
-        input.x = Input.GetAxis("Horizontal") * (playerSpeed) * (isGrounded ? 1.0f : jumpControl);
-
         if (input.x == 0 && isGrounded)
         {
             // decel
             rb.AddForce(-rb.velocity * decelRate);
         }
 
-        if (Input.GetButton("Jump") && isGrounded && (Time.time-lastJump) > minTimeBetweenJumps)
-        {
-            lastJump = Time.time;   
-            input.y = jumpHeight;
-        }
 
         // add force
         rb.AddForce(new Vector2(input.x,0),ForceMode2D.Impulse);
@@ -134,10 +153,29 @@ public class PlayerController : MonoBehaviour {
         }
 
         if (collision.gameObject.tag == "GarbageCan")
+        {
+            anim.SetTrigger("Dance");
             gm.PlayerExit();
+            controlsEnabled = false;
+        }
 
         if (collision.gameObject.tag == "AudioTrigger")
             collision.GetComponent<PlaySoundTrigger>().PlaySound();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Enemy")
+        {
+            // we are hit!! disable control
+            controlsEnabled = false;
+            rb.simulated = false;
+
+            // play animation
+            anim.SetTrigger("Died");
+            // die
+            gm.Die();
+        }
     }
 
 }

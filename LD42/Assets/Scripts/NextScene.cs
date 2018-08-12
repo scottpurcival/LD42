@@ -14,4 +14,9 @@ public class NextScene : MonoBehaviour{
 
         SceneManager.LoadSceneAsync(nextScene);
     }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+    }
 }

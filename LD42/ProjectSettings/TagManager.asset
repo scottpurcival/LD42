@@ -9,6 +9,7 @@ TagManager:
   - GarbageCanFlare
   - InstructionText
   - AudioTrigger
+  - Enemy
   layers:
   - Default
   - TransparentFX
