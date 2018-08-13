@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
     public int filesInScene = 0;
     public int filesCollected = 0;
     public float parTime = 120;
+    public float popUpFrequency = 7.0f;
     float playTime;
     public GameObject gcanFlare;
     public Whoosh whooshText;
@@ -77,7 +78,7 @@ public class GameManager : MonoBehaviour {
             Vector2 spawnPos = new Vector2(UnityEngine.Random.Range(screensize.x*0.15f, screensize.x * 0.85f), UnityEngine.Random.Range(screensize.y * 0.15f, screensize.y * 0.85f));
             temp.transform.SetPositionAndRotation(spawnPos, Quaternion.identity);
 
-            yield return new WaitForSeconds(10.0f);
+            yield return new WaitForSeconds(popUpFrequency);
         }
     }
 

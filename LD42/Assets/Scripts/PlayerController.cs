@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour {
     Animator anim;
     SpriteRenderer sprite;
     GameManager gm;
+    public GameObject landingBlast;
     public AudioSource footsteps;
     public AudioSource jump;
     public AudioSource fileWhoosh;
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour {
     public float distanceToGround = 0;
     public float groundedDistance = 1.0f;
     public float onGroundDist = 0.7f;
+    public float blastVelocity = 3.5f;
     public string[] groundLayers;
 
     bool controlsEnabled = true;
@@ -35,7 +37,6 @@ public class PlayerController : MonoBehaviour {
     float lastJump = 0;
     public float minTimeBetweenJumps = 0.1f;
 
-    public GameObject holding;
 
     // Use this for initialization
     void Start () {
@@ -52,6 +53,9 @@ public class PlayerController : MonoBehaviour {
         isGrounded = CheckIsGrounded();
         if (isGrounded && isFalling)
             tryingToStop = true;
+        // enable landing blast if required
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Landing") && isFalling && isGrounded && rb.velocity.y < blastVelocity)
+            Instantiate(landingBlast, transform.position, Quaternion.identity);
         isFalling = !isGrounded && (rb.velocity.y < -flipVelocity);
         if (isFalling)
             Debug.Log(RayCastDistToGround() + " : " + rb.velocity.y);
@@ -137,6 +141,9 @@ public class PlayerController : MonoBehaviour {
         if(!isAlive && isGrounded)
             rb.simulated = false;   // disable rigidbody on death.
 
+        if (!controlsEnabled && isGrounded)
+            rb.simulated = false;  // stop player on win!
+
         anim.SetFloat("DistanceToGround", RayCastDistToGround());
     }
 
@@ -157,8 +164,6 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Hit: " + collision.gameObject.tag + " and Holding: " + holding);
-
         if (collision.gameObject.tag == "FileToClear")
         {
             Destroy(collision.gameObject);
@@ -173,6 +178,7 @@ public class PlayerController : MonoBehaviour {
                 anim.SetTrigger("Dance");
                 gm.PlayerExit();
                 controlsEnabled = false;
+                //rb.AddForce(-rb.velocity, ForceMode2D.Impulse);
             }
         }
 
@@ -182,15 +188,18 @@ public class PlayerController : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy")
         {
-            // we are hit!! disable control
-            controlsEnabled = false;
-            isAlive = false;
-            // play animation
-            anim.SetTrigger("Died");
-            // die
-            gm.Die();
+            if (controlsEnabled)    // check to prevent us dying after we already died/won
+            {
+                // we are hit!! disable control
+                controlsEnabled = false;
+                isAlive = false;
+                // play animation
+                anim.SetTrigger("Died");
+                // die
+                gm.Die();
+            }
         }
     }
 

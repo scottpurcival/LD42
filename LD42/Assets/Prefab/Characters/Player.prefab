@@ -514,6 +514,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f22c70cab0978a142b2dc47954b3cdc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  landingBlast: {fileID: 1453340346254430, guid: 6e2f9706bbc083247bb3a727630d5de8,
+    type: 2}
   footsteps: {fileID: 82900505673385584}
   jump: {fileID: 82451749835986300}
   fileWhoosh: {fileID: 82685092657319024}
@@ -528,11 +530,11 @@ MonoBehaviour:
   distanceToGround: 0
   groundedDistance: 1
   onGroundDist: 0.7
+  blastVelocity: -8
   groundLayers:
   - MenuBar
   - Icons
   minTimeBetweenJumps: 0.1
-  holding: {fileID: 0}
 --- !u!212 &212219396329093078
 SpriteRenderer:
   m_ObjectHideFlags: 1
