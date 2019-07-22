@@ -26,12 +26,14 @@ public class PlayerController : MonoBehaviour {
     public float onGroundDist = 0.7f;
     public float blastVelocity = 3.5f;
     public string[] groundLayers;
+    float timeSinceGrounded = 0;
+    public float jumpFudgeTime = 0.3f; // seconds after leaving ground for which we can still jump
 
     bool controlsEnabled = true;
     bool isAlive = true;
     bool isGrounded = true;
     bool isFalling = false;
-    bool tryingToStop = false;
+    //bool tryingToStop = false;
     bool dancing = false;
 
     float lastJump = 0;
@@ -50,9 +52,9 @@ public class PlayerController : MonoBehaviour {
 	void Update ()
     {
         // find state
-        isGrounded = CheckIsGrounded();
-        if (isGrounded && isFalling)
-            tryingToStop = true;
+        CheckIsGrounded();
+        //if (isGrounded && isFalling)
+            //tryingToStop = true;
         // enable landing blast if required
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Landing") && isFalling && isGrounded && rb.velocity.y < blastVelocity)
             Instantiate(landingBlast, transform.position, Quaternion.identity);
@@ -62,7 +64,9 @@ public class PlayerController : MonoBehaviour {
 
         // set animator
         anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
-        sprite.flipX = (rb.velocity.x < flipVelocity) ? true : false;
+        sprite.flipX = (rb.velocity.x < -flipVelocity) ? true : sprite.flipX;
+        sprite.flipX = (rb.velocity.x > flipVelocity) ? false : sprite.flipX;
+
         anim.SetBool("isGrounded", isGrounded);
         anim.SetBool("Falling", isFalling);
 
@@ -71,7 +75,7 @@ public class PlayerController : MonoBehaviour {
             // get input
             input = Vector2.zero;
             input.x = Input.GetAxis("Horizontal") * (playerSpeed) * (isGrounded ? 1.0f : jumpControl);
-            if (Input.GetButton("Jump") && isGrounded && (Time.time - lastJump) > minTimeBetweenJumps)
+            if (Input.GetButton("Jump") && timeSinceGrounded < jumpFudgeTime && (Time.time - lastJump) > minTimeBetweenJumps)
             {
                 lastJump = Time.time;
                 input.y = jumpHeight;
@@ -96,17 +100,17 @@ public class PlayerController : MonoBehaviour {
         }
 
         // check if player is trying to decel
-        if (rb.velocity.x > 0 && input.x < 0 || rb.velocity.x < 0 && input.x > 0)
+        /*if (rb.velocity.x > 0 && input.x < 0 || rb.velocity.x < 0 && input.x > 0)
         {
             // we are trying to slow down!!!
             tryingToStop = true;
-        }
+        }*/
 
-        if (input.x == 0 && isGrounded)
+        /*if (input.x == 0 && isGrounded)
         {
             // decel
             rb.AddForce(-rb.velocity * decelRate);
-        }
+        }*/
 
         if (isGrounded)
             footsteps.pitch = Mathf.Abs(rb.velocity.x) / terminalVelocity.x * footstepSpeedModifier;
@@ -114,14 +118,14 @@ public class PlayerController : MonoBehaviour {
             footsteps.pitch = 0;
 
         // add force
-        rb.AddForce(new Vector2(input.x,0),ForceMode2D.Impulse);
+        rb.velocity = new Vector2(input.x,rb.velocity.y);
         rb.AddForce(new Vector2(0, input.y), ForceMode2D.Impulse);
 
     }
 
     private void FixedUpdate()
     {
-        if (tryingToStop)
+        /*if (tryingToStop)
         {
             // clamp velocity
             Vector2 newRB = rb.velocity;
@@ -136,7 +140,7 @@ public class PlayerController : MonoBehaviour {
             newRB.x = Mathf.Clamp(newRB.x, -terminalVelocity.x, terminalVelocity.x);
             newRB.y = Mathf.Clamp(newRB.y, -terminalVelocity.y, terminalVelocity.y);
             rb.velocity = newRB;
-        }
+        }*/
 
         if(!isAlive && isGrounded)
             rb.simulated = false;   // disable rigidbody on death.
@@ -159,7 +163,14 @@ public class PlayerController : MonoBehaviour {
 
     bool CheckIsGrounded()
     {
-        return (RayCastDistToGround() < onGroundDist) || (RayCastDistToGround() < groundedDistance && Mathf.Abs(rb.velocity.y) < flipVelocity);
+        isGrounded = (RayCastDistToGround() < onGroundDist) || (RayCastDistToGround() < groundedDistance && Mathf.Abs(rb.velocity.y) < flipVelocity);
+
+        if (isGrounded)
+            timeSinceGrounded = 0;
+        else
+            timeSinceGrounded += Time.deltaTime;
+
+        return isGrounded;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -1849,6 +1849,7 @@ MonoBehaviour:
   filesInScene: 0
   filesCollected: 0
   parTime: 30
+  popUpFrequency: 7
   gcanFlare: {fileID: 840333099}
   whooshText: {fileID: 1314613513}
   allFilesCollectedTrigger: {fileID: 1268811039}
@@ -2363,7 +2364,12 @@ Prefab:
     - target: {fileID: 114177651099044986, guid: 9ca3d9b15815a1646bfda0c4c4ab5900,
         type: 2}
       propertyPath: flipVelocity
-      value: 0.1
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114177651099044986, guid: 9ca3d9b15815a1646bfda0c4c4ab5900,
+        type: 2}
+      propertyPath: decelRate
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9ca3d9b15815a1646bfda0c4c4ab5900, type: 2}

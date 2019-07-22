@@ -519,14 +519,14 @@ MonoBehaviour:
   footsteps: {fileID: 82900505673385584}
   jump: {fileID: 82451749835986300}
   fileWhoosh: {fileID: 82685092657319024}
-  playerSpeed: 0.5
+  playerSpeed: 4
   jumpHeight: 7
   jumpControl: 1
   terminalVelocity: {x: 4, y: 10}
   footstepSpeedModifier: 1
   maxLandingVelocity: 1
-  decelRate: 40
-  flipVelocity: 0.1
+  decelRate: 50
+  flipVelocity: 0.15
   distanceToGround: 0
   groundedDistance: 1
   onGroundDist: 0.7
@@ -534,7 +534,8 @@ MonoBehaviour:
   groundLayers:
   - MenuBar
   - Icons
-  minTimeBetweenJumps: 0.1
+  jumpFudgeTime: 0.1
+  minTimeBetweenJumps: 0.2
 --- !u!212 &212219396329093078
 SpriteRenderer:
   m_ObjectHideFlags: 1
